@@ -29,7 +29,6 @@ Um projeto moderno desenvolvido com **React**, **TypeScript** e **Material-UI (M
 - **React** — Biblioteca para construção de interfaces
 - **TypeScript** — Superset de JavaScript com tipagem estática
 - **Material-UI (MUI)** — Componentes estilizados e prontos para produção
-- **Vite** ou **CRA** — *(colocar conforme o que usou)*  
 - **ESLint + Prettier** — Padronização e qualidade de código
 
 ---
