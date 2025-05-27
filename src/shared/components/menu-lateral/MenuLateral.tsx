@@ -1,7 +1,8 @@
 import { Avatar, Divider, Drawer, List, ListItemButton, ListItemIcon, ListItemText, useTheme } from "@mui/material"
-import { Box } from "@mui/system"
+import { Box, useMediaQuery } from "@mui/system"
 import avatarImg from "../menu-lateral/avatar.png"
 import HomeIcon from '@mui/icons-material/Home';
+import { useDrawerContext } from "../../contexts";
 
 // Tipagem das props do componente — vai receber o "children"
 interface IMenuLateralProps {
@@ -11,10 +12,14 @@ interface IMenuLateralProps {
 export const MenuLateral: React.FC<IMenuLateralProps> = ({children}) => {
     // Acessando o tema (para pegar cores, espaçamentos, etc.)
     const theme = useTheme()
+    const smDown = useMediaQuery(theme.breakpoints.down('sm'))
+
+    const { isDrawerOpen, toggleDrawerOpen } = useDrawerContext()
+
     return (
         <>
             {/* Drawer = menu lateral fixo */}
-            <Drawer open={true} variant="permanent">                
+            <Drawer open={isDrawerOpen} variant={ smDown ? "temporary" : "permanent"} onClose={toggleDrawerOpen}>                
                 {/* Caixa principal do Drawer */}
                 <Box width={theme.spacing(28)} height="100%" display="flex" flexDirection="column">
                     {/* Caixa para o Avatar centralizado */}
@@ -48,7 +53,7 @@ export const MenuLateral: React.FC<IMenuLateralProps> = ({children}) => {
             </Drawer>
 
             {/* Caixa principal do conteúdo, ao lado do Drawer */}
-            <Box height="100vh" marginLeft={theme.spacing(28)}>
+            <Box height="100vh" marginLeft={smDown ? 0 : theme.spacing(28)}>
                 {/* Aqui vai o conteúdo passado como children */}
                 {children}
             </Box>
