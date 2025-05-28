@@ -1,8 +1,42 @@
-import { Avatar, Divider, Drawer, List, ListItemButton, ListItemIcon, ListItemText, useTheme } from "@mui/material"
+import { Avatar, Divider, Drawer, Icon, List, ListItemButton, ListItemIcon, ListItemText, toggleButtonClasses, useTheme } from "@mui/material"
 import { Box, useMediaQuery } from "@mui/system"
 import avatarImg from "../menu-lateral/avatar.png"
 import HomeIcon from '@mui/icons-material/Home';
 import { useDrawerContext } from "../../contexts";
+import { useMatch, useNavigate, useResolvedPath } from "react-router-dom";
+
+
+interface IListItemLinkProps {
+    to: string
+    icon: string
+    label: string
+    onClick: (() => void) | undefined
+}
+
+const ListItemLink: React.FC<IListItemLinkProps> = ({ to, icon, label, onClick }) => {
+    
+    const navigate = useNavigate()
+
+    const resolvedPath = useResolvedPath(to)
+    const match = useMatch({path: resolvedPath.pathname, end: false})
+    
+    const handleClick = () => {
+        navigate(to)
+        onClick?.() // forma pratica sem utilazr o if em caso de undefined "?."
+    }
+    
+    return (
+        <ListItemButton selected={!!match} onClick={handleClick}>                              
+             {/* Ícone da home */}
+                <ListItemIcon>
+                    <Icon>{icon}</Icon>
+                    </ListItemIcon>
+                 {/* Texto do item */}
+                <ListItemText primary={label} />
+        </ListItemButton>
+    )
+}
+
 
 // Tipagem das props do componente — vai receber o "children"
 interface IMenuLateralProps {
@@ -14,7 +48,7 @@ export const MenuLateral: React.FC<IMenuLateralProps> = ({children}) => {
     const theme = useTheme()
     const smDown = useMediaQuery(theme.breakpoints.down('sm'))
 
-    const { isDrawerOpen, toggleDrawerOpen } = useDrawerContext()
+    const { isDrawerOpen, toggleDrawerOpen, drawerOptions } = useDrawerContext()
 
     return (
         <>
@@ -27,9 +61,7 @@ export const MenuLateral: React.FC<IMenuLateralProps> = ({children}) => {
                         {/* Avatar com a imagem importada */}
                         <Avatar
                             sx={{ height: theme.spacing(12), width: theme.spacing(12) }}
-                            src={avatarImg}
-                        />
-
+                            src={avatarImg}/>
                     </Box>
                     {/* Linha divisória */}
                     <Divider />
@@ -37,14 +69,16 @@ export const MenuLateral: React.FC<IMenuLateralProps> = ({children}) => {
                     <Box flex={1}>
                         {/* Lista de botões de navegação */}
                         <List component="nav">
-                            <ListItemButton>                              
-                                {/* Ícone da home */}
-                                <ListItemIcon>
-                                    <HomeIcon />
-                                </ListItemIcon>
-                                {/* Texto do item */}
-                                <ListItemText primary="Página inicial" />
-                            </ListItemButton>
+                            {drawerOptions.map(drawerOptions =>( 
+                            <ListItemLink
+                            to={drawerOptions.icon}
+                            key={drawerOptions.path}
+                            icon={drawerOptions.path}
+                            label={drawerOptions.label}
+                            onClick={smDown ? toggleDrawerOpen : undefined} // para não alterar o valor ou alternando
+                            
+                            />
+                        ))}
                         </List>
 
                     </Box>
