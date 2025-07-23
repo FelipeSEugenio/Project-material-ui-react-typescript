@@ -2,7 +2,7 @@ import { Avatar, Divider, Drawer, Icon, List, ListItemButton, ListItemIcon, List
 import { Box, useMediaQuery } from "@mui/system"
 import avatarImg from "../menu-lateral/avatar.png"
 import HomeIcon from '@mui/icons-material/Home';
-import { useDrawerContext } from "../../contexts";
+import { useAppThemeContext, useDrawerContext } from "../../contexts";
 import { useMatch, useNavigate, useResolvedPath } from "react-router-dom";
 
 
@@ -49,6 +49,7 @@ export const MenuLateral: React.FC<IMenuLateralProps> = ({children}) => {
     const smDown = useMediaQuery(theme.breakpoints.down('sm'))
 
     const { isDrawerOpen, toggleDrawerOpen, drawerOptions } = useDrawerContext()
+    const { toggleTheme } = useAppThemeContext()
 
     return (
         <>
@@ -81,6 +82,16 @@ export const MenuLateral: React.FC<IMenuLateralProps> = ({children}) => {
                         ))}
                         </List>
 
+                    </Box>
+                    <Box>
+                        <List component="nav">
+                        <ListItemButton onClick={toggleTheme}>                              
+                        <ListItemIcon>
+                        <Icon>dark_mode</Icon>
+                        </ListItemIcon>
+                        <ListItemText primary="alternar tema" />
+                        </ListItemButton>
+                        </List>
                     </Box>
 
                 </Box>
